@@ -1,6 +1,3 @@
-
-
-
 #批量提取TPM值
 
 library("rio")
@@ -56,11 +53,3 @@ lujing3<-paste0("D:\\整合完的表达谱\\",i,'.txt')
 write.table(buwanqueshi,file=lujing3,sep="\t",quote = F)
 
 }
-
-
-
-
-
-
-
-
