@@ -1,6 +1,6 @@
 #用TCGA数据计算差异表达、相关系数
 
-#去掉样本小于10的阶段，查看分布！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+#去掉样本小于10的阶段
 library("rio")
 
 clinlic_files<-list.files(path="D:\\学校电脑\\临床tsv\\",full.names =T,recursive=T)
@@ -182,104 +182,5 @@ colnames(jpvs)<-gsub('..p.value',"",colnames(jpvs))
 write.table(jpvs,file=one_file,append=T,quote=F,col.names = T,row.names = T,sep="\t")
 
 }}
-
-
-
-
-
-#功能富集
-library("qvalue")  
-library("clusterProfiler")
-library("org.Hs.eg.db")
-
-okNet<-readRDS("D:\\学校电脑\\提取的lnc-gene互作总网.rds")
-
-for(i in cancers[jsd,1]){               
-  lujing1<-paste0("D:\\学校电脑\\新互作边\\",i,'.txt')
-  if(file.exists(lujing1)){
-    
-    a<-read.table(lujing1,sep="\t",header=T)
-    p_in_lie<-grep("p.value",colnames(a))
-    huzuogene<-apply(a[,p_in_lie],2,function(ph){
-      a1<-qvalue(ph)$qvalues
-      xz<-which(a1<0.05)
-      ge<-unique(a[xz,2])
-      intergenes<-unique(okNet[okNet[,3] %in% ge,4])
-      go1<-enrichGO(intergenes,OrgDb='org.Hs.eg.db',ont="BP",pAdjustMethod="fdr",pvalueCutoff=0.05,keyType="ENTREZID")
-      kegg1<-enrichKEGG(intergenes,pAdjustMethod="fdr",pvalueCutoff=0.05,keyType="kegg")
-      gogs<-go1$Description
-      kgs<-kegg1$Description
-      n1<-paste0("************",i,"--","GO-BP","************")
-      n2<-paste0("************",i,"--","kegg","************")
-      return(c(n1,gogs,n2,kgs))
-    })
-    
-    
-uio<-do.call(cbind,lapply(huzuogene,'length<-',max(lengths(huzuogene))))    
-# uio<-do.call(cbind,lapply(huzuogene,function(x){
-#   length(x)<-max(lengths(huzuogene))
-#   x
-#   }))    
-#  这个和上面那行等同，只不过function的写法不同
-
-
-    colnames(uio)<-gsub('..p.value',"",colnames(uio))
-    lujing3<-paste0("D:\\学校电脑\\功能富集\\",i,'.txt')
-    write.table(uio,file=lujing3,quote=F,col.names = T,row.names = F,sep="\t")
-    
-  }}
-
-
-
-
-
-
-
-  
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
