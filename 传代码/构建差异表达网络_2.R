@@ -1,4 +1,4 @@
-#给蛋白质互作文件去重 已经确定了全是2倍重复的 重复的边打分也一致 这里用unique行不行？
+#给蛋白质互作文件去重
 w<-read.table("D:\\下载\\9606.protein.links.v11.5.txt",sep=" ",header=T)
 nn<-apply(w,1,function(x){c(sort(x[1:2]),x[3])})
 library("dplyr")
@@ -14,7 +14,7 @@ b<-unique(aa[aa[,2] %in% ll[,2],1:2])
 ccc<-merge(a,b,by="V1")
 saveRDS(ccc,"D:\\学校电脑\\ENSP-ENSG-ncbi.rds")
 
-#挑出与icp互作的基因  可以叫“关联有罪”策略
+#挑出与icp互作的基因
 ppi<-readRDS("D:\\学校电脑\\去重后的蛋白质互作文件.rds")
 EEN<-readRDS("D:\\学校电脑\\ENSP-ENSG-ncbi.rds")
 b<-apply(ppi,1,function(x){
@@ -45,29 +45,3 @@ pp<-match(all_nodes,P_E[,1])
 d<-match(P_E[pp,2],s2[,3])
 dd<-s2[s2[,3] %in% P_E[pp,2],]
 saveRDS(dd,file="D:\\学校电脑\\提取的lnc-gene互作总网.rds")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
